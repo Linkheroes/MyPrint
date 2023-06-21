@@ -1,0 +1,33 @@
+name: libprint.a
+env:
+  EXECUTABLES:  'libprint.a'
+on:
+  push:
+    branches-ignore:
+      - 'ga-ignore-*'
+  pull_request:
+    branches-ignore:
+      - 'ga-ignore-*'
+jobs:
+  coding_style_checker:
+    name: Coding style checker
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run coding style
+        run: check.sh $(pwd) $(pwd)
+      - name: Display style errors
+        run: |
+          have_error=0;
+          while read line; do IFS=':' read -ra CODING <<< "$line";
+              echo "::error file=${CODING[0]},line=${CODING[1]},title=${CODING[2]} coding style error::${CODING[3]}";
+              have_error=1;
+          done < coding-style-reports.log
+          if [[ $have_error -eq 1 ]]; then
+            exit 1
+          fi
+          echo "::notice title=Marvin :: No coding style error detected."
+          exit 0
