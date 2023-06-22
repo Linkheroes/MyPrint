@@ -45,7 +45,7 @@ jobs:
         run: |
           have_error=0;
           while read line; do IFS=':' read -ra CODING <<< "$line";
-              echo "::error file=${CODING[0]},line=${CODING[2]},title=${CODING[1]} banned function::are used";
+              echo "::error file=${CODING[0]},line=${CODING[2]},title=${CODING[1]}::banned function is used";
               have_error=1;
           done < banned-functions-reports.log
           if [[ $have_error -eq 1 ]]; then
