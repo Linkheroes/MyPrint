@@ -22,11 +22,11 @@ void flag_a(va_list list);
 void flag_e(va_list list);
 
 int my_strlen(char const *str);
-void print(char const *buffer);
+void print_s(char const *buffer);
 void print_error(char const *buffer);
 void print_char(char const c);
 void print_array(char **array);
 void print_nbr(int nb);
-void print_all(char const *format, ...);
+void print(char const *format, ...);
 
 #endif /* !MYPRINT_H_ */
