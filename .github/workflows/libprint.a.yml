@@ -39,11 +39,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run coding style
-        run: check.sh $(pwd) $(pwd)
-      - name: Display style errors
+      - name: Run banned function script
+        run: make tests
+      - name: Display errors
         run: |
-          make tests
           have_error=0;
           while read line; do IFS=':' read -ra CODING <<< "$line";
               echo "::error file=${CODING[0]},line=${CODING[2]},title=${CODING[1]} banned function::are used";
