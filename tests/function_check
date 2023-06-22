@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+import os
+import re
+
+# Liste des fonctions de la libc à exclure
+fonctions_exclues = ["write", "my_strlen", "print", "print_array", "print_s", "print_error", "print_nbr", "while", "print_char", "for", "if", "flag_s", "flag_c", "flag_e", "flag_a", "flag_n", "va_arg", "va_start", "ptr", "check_args"]  # Ajoutez ici les fonctions à exclure
+
+def rechercher_fonctions_libc(fichier):
+    fonctions_libc = {}
+
+    with open(fichier, 'r') as f:
+        lignes = f.readlines()
+
+    for i, ligne in enumerate(lignes, start=1):
+        # Expression régulière pour trouver les appels de fonctions de la libc
+        pattern = r'\b(?!(?:' + '|'.join(fonctions_exclues) + r')\b)(\w+)\s*\('
+        matches = re.findall(pattern, ligne)
+        for match in matches:
+            fonction = match.strip()
+            if fonction not in fonctions_libc:
+                fonctions_libc[fonction] = []
+            fonctions_libc[fonction].append(i)
+
+    return fonctions_libc
+
+# Parcours des fichiers .c dans le dossier "src"
+def parcours_dossier_src():
+    for dossier_racine, _, fichiers in os.walk('src'):
+        for fichier in fichiers:
+            if fichier.endswith('.c'):
+                chemin_fichier = os.path.join(dossier_racine, fichier)
+                fonctions_libc = rechercher_fonctions_libc(chemin_fichier)
+                if fonctions_libc:
+                    for fonction, lignes in fonctions_libc.items():
+                        print(f"{chemin_fichier}:{fonction}:" + "".join(str(ligne) for ligne in lignes))
+
+# Appel de la fonction de parcours du dossier "src"
+parcours_dossier_src()

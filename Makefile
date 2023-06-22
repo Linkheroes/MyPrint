@@ -56,4 +56,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+tests:
+	./tests/function_check > banned-functions-reports.log
+
+.PHONY: all clean fclean re tests
