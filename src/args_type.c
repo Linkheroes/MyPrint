@@ -16,7 +16,7 @@ void flag_c(va_list list)
 
 void flag_s(va_list list)
 {
-    print(va_arg(list, char *));
+    print_s(va_arg(list, char *));
 }
 
 void flag_n(va_list list)
